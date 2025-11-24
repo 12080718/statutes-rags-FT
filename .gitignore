@@ -1,0 +1,80 @@
+# Python
+###################
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+sdist/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+# Specific venv files from setup/
+setup/bin/
+setup/lib/
+setup/datasets/
+
+# Jupyter Notebook
+###################
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# IDE / Editor
+###################
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS-specific
+###################
+.DS_Store
+Thumbs.db
+
+# Downloaded files
+###################
+setup/*.tgz
+
+# Test & Evaluation Results
+###################
+test_mecab.json
+
+# Datasets
+###################
+datasets/
+!datasets/README.md
+!datasets/egov_laws/
+datasets/egov_laws/*
+!datasets/egov_laws/README.md
+!datasets/lawqa_jp/
+datasets/lawqa_jp/*
+!datasets/lawqa_jp/README.md
+!datasets/lawqa_jp/LICENSE.md
+!datasets/civil_law_instructions/
+datasets/civil_law_instructions/*
+!datasets/civil_law_instructions/README.md
+!datasets/criminal_law_exams/
+datasets/criminal_law_exams/*
+!datasets/criminal_law_exams/README.md
+
+# Data
+###################
+data/
+!data/README.md
+# Evaluation results with numbers
+
+# Test scripts in root
+test_retrieval.py

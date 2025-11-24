@@ -1,0 +1,17 @@
+# LLM/RAG 実行に必要な主要パッケージ
+langchain>=0.1.0
+langchain-community>=0.0.10
+faiss-cpu>=1.7.4
+sentence-transformers>=2.2.0
+rank-bm25>=0.2.2
+qdrant-client>=1.7.0
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+tqdm>=4.66.0
+pandas>=2.0.0
+datasets>=2.15.0
+sudachipy>=0.6.0
+sudachidict-core>=20230927
+janome>=0.5.0
+# CrossEncoder/Reranker 用。GPU 環境なら CUDA 版 torch を別途指定してください。
+torch

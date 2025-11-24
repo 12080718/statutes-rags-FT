@@ -1,0 +1,35 @@
+{
+  "config": {
+    "rag_enabled": true,
+    "retriever_type": "vector",
+    "llm_model": "qwen3:8b",
+    "few_shot_enabled": true,
+    "cot_enabled": false,
+    "reranker_enabled": false,
+    "reranker_model": null,
+    "rerank_top_n": null,
+    "ensemble_runs": null,
+    "top_k": 1,
+    "total_samples": 1
+  },
+  "summary": {
+    "accuracy": 0.0,
+    "correct_count": 0,
+    "total_count": 1
+  },
+  "results": [
+    {
+      "question": "金融商品取引法第5条第6項により、公益又は投資者保護に欠けることがないものとして内閣府令で定める場合に該当することを理由として、届出書提出外国会社が金融商品取引法第5条第1項の届出書に代えて提出ことができる書類を教えてください。",
+      "choices": "a 第5条第1項の届出書に類する書類であって、届出書提出外国会社の本店所在地の母国語であるフランス語で記載されているもの\nb 外国において開示予定の参照書類であって、英語で記載されているもの\nc 第5条第1項の届出書に類する書類であって、英語で記載されているもの\nd 外国において開示が行われている参照書類であって、日本語で記載されているもの",
+      "correct_answer": "c",
+      "predicted_answer": "error",
+      "is_correct": false,
+      "response": "CUDA out of memory. Tried to allocate 1.16 GiB. GPU 0 has a total capacity of 9.64 GiB of which 395.88 MiB is free. Including non-PyTorch memory, this process has 9.18 GiB memory in use. Of the allocated memory 8.86 GiB is allocated by PyTorch, and 64.07 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "retrieved_docs_count": 1,
+      "file_name": "金商法_第2章_選択式_関連法令_問題番号57",
+      "references": [
+        "https://laws.e-gov.go.jp/law/323AC0000000025"
+      ]
+    }
+  ]
+}
