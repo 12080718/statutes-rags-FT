@@ -15,3 +15,6 @@ sudachidict-core>=20230927
 janome>=0.5.0
 # CrossEncoder/Reranker 用。GPU 環境なら CUDA 版 torch を別途指定してください。
 torch
+# 4bit QLoRA 用
+bitsandbytes
+accelerate

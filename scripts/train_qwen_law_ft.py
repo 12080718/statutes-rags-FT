@@ -125,7 +125,7 @@ def parse_args():
 
     # 安全実行用フラグ/ステップ上書き
     p.add_argument("--do-train", action="store_true", help="指定時のみ trainer.train() を実行して保存する")
-    p.add_argument("--max-steps-override", type=int, default=None, help="TrainingArguments.max_steps を上書き（デフォルトはNoneでエポック指定）")
+    p.add_argument("--max-steps-override", type=int, default=-1, help="TrainingArguments.max_steps を上書き（デフォルトは-1でエポック指定）")
 
     return p.parse_args()
 
