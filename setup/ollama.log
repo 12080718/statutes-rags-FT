@@ -2551,3 +2551,52 @@ time=2025-11-24T05:51:36.224+09:00 level=WARN source=types.go:800 msg="invalid o
 [GIN] 2025/11/24 - 05:51:43 | 200 |   7.38422734s |       127.0.0.1 | POST     "/api/generate"
 ggml_backend_cuda_device_get_memory device GPU-041aa946-e6e1-5551-8762-a077a074963f utilizing NVML memory reporting free: 4338876416 total: 10737418240
 time=2025-11-24T05:56:43.848+09:00 level=INFO source=server.go:392 msg="starting runner" cmd="/home/london08/yokote/statutes-rags-master/setup/bin/ollama runner --ollama-engine --port 35531"
+time=2025-11-27T02:10:48.475+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=tfs_z
+time=2025-11-27T02:10:48.476+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat
+time=2025-11-27T02:10:48.476+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat_eta
+time=2025-11-27T02:10:48.477+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat_tau
+time=2025-11-27T02:10:48.501+09:00 level=INFO source=server.go:392 msg="starting runner" cmd="/home/london08/yokote/statutes-rags-master/setup/bin/ollama runner --ollama-engine --port 37799"
+time=2025-11-27T02:10:48.792+09:00 level=INFO source=server.go:209 msg="enabling flash attention"
+time=2025-11-27T02:10:48.792+09:00 level=INFO source=server.go:392 msg="starting runner" cmd="/home/london08/yokote/statutes-rags-master/setup/bin/ollama runner --ollama-engine --model /home/london08/work/.ollama-models/blobs/sha256-a3de86cd1c132c822487ededd47a324c50491393e6565cd14bafa40d0b8e686f --port 38437"
+time=2025-11-27T02:10:48.792+09:00 level=INFO source=sched.go:443 msg="system memory" total="31.2 GiB" free="5.0 GiB" free_swap="0 B"
+time=2025-11-27T02:10:48.792+09:00 level=INFO source=sched.go:450 msg="gpu memory" id=GPU-041aa946-e6e1-5551-8762-a077a074963f library=CUDA available="6.7 GiB" free="7.2 GiB" minimum="457.0 MiB" overhead="0 B"
+time=2025-11-27T02:10:48.792+09:00 level=INFO source=server.go:702 msg="loading model" "model layers"=37 requested=-1
+time=2025-11-27T02:10:48.800+09:00 level=INFO source=runner.go:1398 msg="starting ollama engine"
+time=2025-11-27T02:10:48.800+09:00 level=INFO source=runner.go:1433 msg="Server listening on 127.0.0.1:38437"
+time=2025-11-27T02:10:48.804+09:00 level=INFO source=runner.go:1271 msg=load request="{Operation:fit LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:37[ID:GPU-041aa946-e6e1-5551-8762-a077a074963f Layers:37(0..36)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-27T02:10:48.825+09:00 level=INFO source=ggml.go:136 msg="" architecture=qwen3 file_type=Q4_K_M name="Qwen3 8B" description="" num_tensors=399 num_key_values=29
+load_backend: loaded CPU backend from /home/london08/yokote/statutes-rags-master/setup/lib/ollama/libggml-cpu-haswell.so
+ggml_cuda_init: GGML_CUDA_FORCE_MMQ:    no
+ggml_cuda_init: GGML_CUDA_FORCE_CUBLAS: no
+ggml_cuda_init: found 1 CUDA devices:
+  Device 0: NVIDIA GeForce RTX 3080, compute capability 8.6, VMM: yes, ID: GPU-041aa946-e6e1-5551-8762-a077a074963f
+load_backend: loaded CUDA backend from /home/london08/yokote/statutes-rags-master/setup/lib/ollama/cuda_v12/libggml-cuda.so
+time=2025-11-27T02:10:48.875+09:00 level=INFO source=ggml.go:104 msg=system CPU.0.SSE3=1 CPU.0.SSSE3=1 CPU.0.AVX=1 CPU.0.AVX2=1 CPU.0.F16C=1 CPU.0.FMA=1 CPU.0.BMI2=1 CPU.0.LLAMAFILE=1 CPU.1.LLAMAFILE=1 CUDA.0.ARCHS=500,520,600,610,700,750,800,860,890,900,1200 CUDA.0.USE_GRAPHS=1 CUDA.0.PEER_MAX_BATCH_SIZE=128 compiler=cgo(gcc)
+time=2025-11-27T02:10:49.191+09:00 level=INFO source=runner.go:1271 msg=load request="{Operation:alloc LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:37[ID:GPU-041aa946-e6e1-5551-8762-a077a074963f Layers:37(0..36)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-27T02:10:49.237+09:00 level=INFO source=runner.go:1271 msg=load request="{Operation:commit LoraPath:[] Parallel:1 BatchSize:512 FlashAttention:true KvSize:4096 KvCacheType: NumThreads:8 GPULayers:37[ID:GPU-041aa946-e6e1-5551-8762-a077a074963f Layers:37(0..36)] MultiUserCache:false ProjectorPath: MainGPU:0 UseMmap:false}"
+time=2025-11-27T02:10:49.237+09:00 level=INFO source=ggml.go:482 msg="offloading 36 repeating layers to GPU"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=ggml.go:489 msg="offloading output layer to GPU"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=ggml.go:494 msg="offloaded 37/37 layers to GPU"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=device.go:240 msg="model weights" device=CUDA0 size="4.5 GiB"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=device.go:245 msg="model weights" device=CPU size="333.8 MiB"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=device.go:251 msg="kv cache" device=CUDA0 size="576.0 MiB"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=device.go:262 msg="compute graph" device=CUDA0 size="166.0 MiB"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=device.go:267 msg="compute graph" device=CPU size="8.0 MiB"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=device.go:272 msg="total memory" size="5.6 GiB"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=sched.go:517 msg="loaded runners" count=1
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=server.go:1294 msg="waiting for llama runner to start responding"
+time=2025-11-27T02:10:49.238+09:00 level=INFO source=server.go:1328 msg="waiting for server to become available" status="llm server loading model"
+time=2025-11-27T02:10:50.993+09:00 level=INFO source=server.go:1332 msg="llama runner started in 2.20 seconds"
+[GIN] 2025/11/27 - 02:11:02 | 200 | 14.545133416s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-27T02:11:03.613+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=tfs_z
+time=2025-11-27T02:11:03.613+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat
+time=2025-11-27T02:11:03.613+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat_eta
+time=2025-11-27T02:11:03.613+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat_tau
+[GIN] 2025/11/27 - 02:11:16 | 200 | 12.853318963s |       127.0.0.1 | POST     "/api/generate"
+time=2025-11-27T02:11:17.011+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat
+time=2025-11-27T02:11:17.011+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat_eta
+time=2025-11-27T02:11:17.011+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=mirostat_tau
+time=2025-11-27T02:11:17.011+09:00 level=WARN source=types.go:800 msg="invalid option provided" option=tfs_z
+[GIN] 2025/11/27 - 02:11:18 | 200 |  1.476537663s |       127.0.0.1 | POST     "/api/generate"
+ggml_backend_cuda_device_get_memory device GPU-041aa946-e6e1-5551-8762-a077a074963f utilizing NVML memory reporting free: 4343070720 total: 10737418240
+time=2025-11-27T02:16:18.725+09:00 level=INFO source=server.go:392 msg="starting runner" cmd="/home/london08/yokote/statutes-rags-master/setup/bin/ollama runner --ollama-engine --port 41457"

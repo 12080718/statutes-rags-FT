@@ -11,6 +11,7 @@ from typing import List, Dict, Any
 from tqdm import tqdm
 import re
 import unicodedata
+from datetime import datetime
 from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -514,13 +515,15 @@ def main():
         "results": results
     }
     
-    # 出力ディレクトリが存在しない場合は作成
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    # 出力ファイル名にタイムスタンプを付与して保存
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M")
+    output_path = args.output.with_name(f"{timestamp}_{args.output.name}")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     
-    with open(args.output, 'w', encoding='utf-8') as f:
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, ensure_ascii=False, indent=2)
     
-    print(f"\nDetailed results saved to: {args.output}")
+    print(f"\nDetailed results saved to: {output_path}")
     
     # 改善提案
     if timeout_errors > 0:
