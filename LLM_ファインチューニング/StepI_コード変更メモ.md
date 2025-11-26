@@ -1,0 +1,6 @@
+- 目的: タスクI-4で指定されたコード確認を実施。Qwen3:8B HF 4bit QLoRA用の不足がないかを確認した結果、修正不要と判断。
+- 確認内容:
+  - `scripts/train_qwen_law_ft.py`: 任意の `--model-name` 受け取り可。`--use-4bit`/`--bnb-4bit-*` で4bit切替可能。
+  - `scripts/evaluate_multiple_choice.py`: `--llm-backend hf`/`--hf-model-name`/`--hf-lora-path`/`--hf-load-in-4bit` あり。
+  - `app/llm/hf_llm.py`: BitsAndBytesConfigで4bitロード、LoRA適用は `lora_path` 指定で実行可（Qwen3:8B HFでも利用想定）。
+- 結論: 現時点でStepIのために追加修正は不要。必要が生じた場合のみ本メモに追記して対応する。

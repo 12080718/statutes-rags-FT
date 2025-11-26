@@ -1,0 +1,5 @@
+- heart01（A100 20GB）はHFバックエンド専用で本番学習・評価を実行、ローカル（3080+Codex）はコード編集と小モデルでの動作検証に専念し、curl/Ollamaはheart01で使わない方針。
+- heart01側は`.venv`+`pip install -r requirements-llm.txt`完了、`datasets/lawqa_jp/data/selection.json`と`results/finetune/ft_direct_full_norag.jsonl`を用意済みでRAGインデックスも整合（no-RAG中心で進行）。
+- 小モデル1.8B（Qwen/Qwen1.5-1.8B-Chat）で4bit QLoRA学習とHF評価が3080/heart01双方で完走しパイプラインは確認済み（精度は低め・出力崩れあり）。
+- train_qwen_law_ft.py / evaluate_multiple_choice.py / hf_llm.py に4bit関連オプションを追加済みで、HFモデルを任意指定した4bit/QLoRAロードが可能。
+- StepD計画の主軸はno-RAG direct/CoT（140問）、StepIではこの土台を使いheart01上でQwen3:8B HF 4bit QLoRA本番学習・評価を実施する。

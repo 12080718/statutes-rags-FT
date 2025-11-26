@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import List, Dict, Any
 from tqdm import tqdm
 import re
+import unicodedata
 from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -107,46 +108,49 @@ def create_multiple_choice_prompt(question: str, choices: Any, context: str = ""
     return build_mc_prompt_direct(question, choices_dict, context, few_shot=use_few_shot)
 
 
+def normalize_and_parse_answer(raw_text: str) -> str:
+    """
+    モデル出力から a/b/c/d を 1 文字で抽出するヘルパー。
+
+    - 全角→半角 (NFKC) で正規化する
+    - アルファベットは小文字にそろえる
+    - 数字 1〜4 を a〜d にマッピングする
+    - 「回答: X」「Answer: X」形式があればそこを優先する
+    - それ以外の場合は、末尾側から最初に現れた a/b/c/d/1/2/3/4 を採用する
+    - 何も見つからなければ "unknown" を返す
+    """
+    if not raw_text:
+        return "unknown"
+
+    # 全角→半角などの正規化
+    text = unicodedata.normalize("NFKC", str(raw_text))
+    t = text.lower()
+
+    # 数字→選択肢のマッピング
+    digit_to_option = {"1": "a", "2": "b", "3": "c", "4": "d"}
+
+    # ① 「回答: X」「Answer: X」形式を優先
+    m = re.search(r"(?:回答|answer)\s*[:：]\s*([abcd1234])", t)
+    if m:
+        ch = m.group(1)
+        if ch in digit_to_option:
+            return digit_to_option[ch]
+        return ch  # a〜d のいずれか
+
+    # ② テキスト末尾側から走査して、最初に見つかった a/b/c/d/1/2/3/4 を採用
+    for ch in reversed(t):
+        if ch in "abcd":
+            return ch
+        if ch in digit_to_option:
+            return digit_to_option[ch]
+
+    # ③ それでも見つからなければ unknown
+    return "unknown"
+
+
 def extract_answer(response: str, is_cot: bool = False) -> str:
     """LLM応答から回答(a/b/c/d)を抽出"""
-    response_lower = response.strip().lower()
-    
-    # CoT形式の場合、"Answer:"以降を優先的に探す
-    if is_cot:
-        # "Answer:" または "Final answer:" の後を探す
-        answer_match = re.search(r'(?:final\s+)?answer\s*[:：]\s*([abcd])', response_lower)
-        if answer_match:
-            return answer_match.group(1)
-        
-        # 最後の行を確認（CoTでは最後に回答を書く傾向）
-        lines = [line.strip() for line in response_lower.split('\n') if line.strip()]
-        if lines:
-            last_line = lines[-1]
-            match = re.search(r'\b([abcd])\b', last_line)
-            if match:
-                return match.group(1)
-    
-    # パターン1: 単独の a, b, c, d
-    if response_lower in ['a', 'b', 'c', 'd']:
-        return response_lower
-    
-    # パターン2: "answer: a" or "回答: a" などの形式
-    match = re.search(r'(?:answer|response|回答|答え|選択肢)\s*[:：]?\s*([abcd])(?![a-z])', response_lower)
-    if match:
-        return match.group(1)
-    
-    # パターン3: 最初の行に出現する a, b, c, d
-    first_line = response_lower.split('\n')[0].strip()
-    match = re.search(r'^[\s"\']?([abcd])[\s"\'\.]?$', first_line)
-    if match:
-        return match.group(1)
-    
-    # パターン4: 最初に出現する a, b, c, d
-    match = re.search(r'\b([abcd])\b', response_lower)
-    if match:
-        return match.group(1)
-    
-    return "unknown"
+    return normalize_and_parse_answer(response)
 
 
 def evaluate_sample(pipeline: RAGPipeline, sample: Dict[str, Any], use_rag: bool = True, use_few_shot: bool = True, use_cot: bool = False) -> Dict[str, Any]:

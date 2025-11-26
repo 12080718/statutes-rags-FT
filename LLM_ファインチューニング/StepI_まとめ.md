@@ -1,0 +1,6 @@
+- 作成物: 前提整理(`StepI_前提整理.md`)、設定案(`StepI_Qwen3_8B_設定案.md`)、本番学習指示(`StepI_A100_Qwen3_8B_本番学習指示.md`)、評価指示(`StepI_A100_Qwen3_8B_評価指示.md`)、コード確認メモ(`StepI_コード変更メモ.md`)を追加。
+- 方針: heart01(A100 20GB)でHFバックエンド専用、モデルは`Qwen/Qwen3-8B`、4bit(nf4+bfloat16)QLoRAでno-RAG directを本番実行。RTX3080では使わず、ローカルは編集と小モデル検証のみ。
+- 学習: トライアルは`.../direct_norag_q8_4bit_trial`に50ステップで動作確認、本番は`.../direct_norag_q8_4bit_v1`に3エポック（batch=2, seq=1024, accum=4, lr=2e-4, warmup=0.03, r=16/alpha=32/dropout=0.05, use-4bit）。OOM時はbatch/seq調整。
+- 評価: ベースラインはLoRAなし`Qwen/Qwen3-8B`で140問、FTはLoRAパスを本番`..._v1`に（トライアルLoRAを試す場合は`..._trial`に差し替え）。`--hf-load-in-4bit`必須、必要に応じ`--no-few-shot`。
+- コード確認: train/evaluate/hf_llmは任意モデル名・4bit・LoRAオプション対応済みで追加修正なし（詳細は`StepI_コード変更メモ.md`）。
+- 次に心臓部で行うこと: heart01で本番学習を`..._v1`出力で実行→ベースライン/FT評価(140問)を実施→結果を評価ログに記録し、精度・出力崩れを比較。
