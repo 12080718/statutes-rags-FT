@@ -7,7 +7,7 @@ import json
 import sys
 import os
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from tqdm import tqdm
 import re
 import unicodedata
@@ -109,49 +109,55 @@ def create_multiple_choice_prompt(question: str, choices: Any, context: str = ""
     return build_mc_prompt_direct(question, choices_dict, context, few_shot=use_few_shot)
 
 
-def normalize_and_parse_answer(raw_text: str) -> str:
-    """
-    モデル出力から a/b/c/d を 1 文字で抽出するヘルパー。
+CHOICE_MAP = {"1": "a", "2": "b", "3": "c", "4": "d"}
+VALID_CHOICES = {"a", "b", "c", "d"}
 
-    - 全角→半角 (NFKC) で正規化する
-    - アルファベットは小文字にそろえる
-    - 数字 1〜4 を a〜d にマッピングする
-    - 「回答: X」「Answer: X」形式があればそこを優先する
-    - それ以外の場合は、末尾側から最初に現れた a/b/c/d/1/2/3/4 を採用する
-    - 何も見つからなければ "unknown" を返す
-    """
-    if not raw_text:
-        return "unknown"
 
-    # 全角→半角などの正規化
-    text = unicodedata.normalize("NFKC", str(raw_text))
-    t = text.lower()
-
-    # 数字→選択肢のマッピング
-    digit_to_option = {"1": "a", "2": "b", "3": "c", "4": "d"}
-
-    # ① 「回答: X」「Answer: X」形式を優先
-    m = re.search(r"(?:回答|answer)\s*[:：]\s*([abcd1234])", t)
+def _extract_choice_from_text(text: str) -> Optional[str]:
+    normalized = unicodedata.normalize("NFKC", text).lower()
+    m = re.search(r"(?<![0-9])([1-4])(?![0-9])", normalized)
     if m:
-        ch = m.group(1)
-        if ch in digit_to_option:
-            return digit_to_option[ch]
-        return ch  # a〜d のいずれか
+        return CHOICE_MAP[m.group(1)]
+    m = re.search(r"(?<![a-z])([abcd])(?![a-z])", normalized)
+    if m:
+        return m.group(1)
+    return None
 
-    # ② テキスト末尾側から走査して、最初に見つかった a/b/c/d/1/2/3/4 を採用
-    for ch in reversed(t):
-        if ch in "abcd":
-            return ch
-        if ch in digit_to_option:
-            return digit_to_option[ch]
 
-    # ③ それでも見つからなければ unknown
-    return "unknown"
+def normalize_and_parse_answer(raw_output: str) -> Optional[str]:
+    """
+    LLM 出力から a/b/c/d を抽出する（見つからなければ None）。
+    - Answer/回答 行を末尾から優先
+    - 次に末尾数行、最後に全文でフォールバック
+    """
+    if not raw_output:
+        return None
+
+    text = unicodedata.normalize("NFKC", raw_output).lower()
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+
+    for line in reversed(lines):
+        if "answer" in line or "回答" in line:
+            choice = _extract_choice_from_text(line)
+            if choice in VALID_CHOICES:
+                return choice
+
+    tail = "\n".join(lines[-3:]) if len(lines) >= 3 else "\n".join(lines)
+    choice = _extract_choice_from_text(tail)
+    if choice in VALID_CHOICES:
+        return choice
+
+    choice = _extract_choice_from_text(text)
+    if choice in VALID_CHOICES:
+        return choice
+
+    return None
 
 
 def extract_answer(response: str, is_cot: bool = False) -> str:
     """LLM応答から回答(a/b/c/d)を抽出"""
-    return normalize_and_parse_answer(response)
+    choice = normalize_and_parse_answer(response)
+    return choice if choice is not None else "unknown"
 
 
 def evaluate_sample(pipeline: RAGPipeline, sample: Dict[str, Any], use_rag: bool = True, use_few_shot: bool = True, use_cot: bool = False) -> Dict[str, Any]:

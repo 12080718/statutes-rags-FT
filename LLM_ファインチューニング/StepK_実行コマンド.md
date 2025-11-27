@@ -16,12 +16,12 @@ python scripts/build_finetune_dataset.py \
 python scripts/train_qwen_law_ft.py \
   --model-name "Qwen/Qwen3-8B" \
   --train-file results/finetune/ft_direct_v3_train_norag.jsonl \
-  --output-dir runs/qwen3_law_ft/direct_norag_q8_4bit_v3 \
+  --output-dir runs/qwen3_law_ft/direct_norag_q8_4bit_v3_b2s768 \
   --num-epochs 1 \
-  --batch-size 8 \
-  --max-seq-length 1024 \
+  --batch-size 2 \
+  --max-seq-length 768 \
   --learning-rate 2e-5 \
-  --gradient-accumulation-steps 4 \
+  --gradient-accumulation-steps 8 \
   --warmup-ratio 0.1 \
   --lora-r 16 \
   --lora-alpha 32 \
@@ -56,7 +56,7 @@ python scripts/evaluate_multiple_choice.py \
   --no-rag \
   --llm-backend hf \
   --hf-model-name "Qwen/Qwen3-8B" \
-  --hf-lora-path runs/qwen3_law_ft/direct_norag_q8_4bit_v3 \
+  --hf-lora-path runs/qwen3_law_ft/direct_norag_q8_4bit_v3_b2s768 \
   --hf-load-in-4bit \
   --ensemble 1
 ```
@@ -83,7 +83,7 @@ python scripts/evaluate_multiple_choice.py \
   --no-rag \
   --llm-backend hf \
   --hf-model-name "Qwen/Qwen3-8B" \
-  --hf-lora-path runs/qwen3_law_ft/direct_norag_q8_4bit_v3 \
+  --hf-lora-path runs/qwen3_law_ft/direct_norag_q8_4bit_v3_b2s768 \
   --hf-load-in-4bit \
   --ensemble 1
 ```
