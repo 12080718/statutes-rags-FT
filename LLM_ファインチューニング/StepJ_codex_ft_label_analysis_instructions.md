@@ -80,12 +80,12 @@
 
    - `--path` または `-p`
      - 読み込む JSONL ファイルパス
-     - デフォルト: `datasets/ft_direct_full_norag.jsonl`
+     - デフォルト: `datasets/ft_direct_full_norag.jsonl`（実行例は `results/finetune/ft_direct_full_norag.jsonl` など実データのパスを指定）
 
    例:
    ```bash
    python analyze_ft_label_distribution.py \
-     --path datasets/ft_direct_full_norag.jsonl
+     --path results/finetune/ft_direct_full_norag.jsonl
    ```
 
 2. **内部処理**
@@ -169,7 +169,7 @@
 
    - `--path` または `-p`
      - 読み込む JSONL ファイルパス
-     - デフォルト: `datasets/ft_direct_full_norag.jsonl`
+     - デフォルト: `datasets/ft_direct_full_norag.jsonl`（実行例は `results/finetune/ft_direct_full_norag.jsonl` など実データのパスを指定）
    - `--max-samples` または `-n`
      - 抽出して表示する最大件数
      - デフォルト: `10`
@@ -177,7 +177,7 @@
    例:
    ```bash
    python spotcheck_yakki_bd.py \
-     --path datasets/ft_direct_full_norag.jsonl \
+     --path results/finetune/ft_direct_full_norag.jsonl \
      --max-samples 10
    ```
 

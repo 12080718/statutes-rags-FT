@@ -147,6 +147,7 @@ def make_instance(
     few_shot: bool = False,
     top_k: int = 0,
     retriever_type: str = "hybrid",
+    use_rag: bool = True,
 ) -> Dict[str, Any]:
     """
     1問分のサンプルとコンテキストから JSONL 1レコードを生成する。
@@ -173,8 +174,28 @@ def make_instance(
         prompt = build_mc_prompt_cot(question, choices, context, style="compact")
         output = f"Reasoning: 条文に基づき選択肢を検討した結果、選択肢{correct}が最も適切と判断。\nAnswer: {correct}"
     else:
-        prompt = build_mc_prompt_direct(question, choices, context, few_shot=few_shot)
-        output = correct
+        if use_rag:
+            prompt = build_mc_prompt_direct(question, choices, context, few_shot=few_shot)
+        else:
+            # v3: no-RAG direct 用のシンプルな学習プロンプト
+            choices_block = (
+                f"a. {choices.get('a', '')}\n"
+                f"b. {choices.get('b', '')}\n"
+                f"c. {choices.get('c', '')}\n"
+                f"d. {choices.get('d', '')}"
+            )
+            prompt = (
+                "あなたは日本の法律に関する4択問題に答えるアシスタントです。\n"
+                "次の問題文と選択肢を読み、最も適切なものを1つ選んでください。\n\n"
+                "問題:\n"
+                f"{question}\n\n"
+                "選択肢:\n"
+                f"{choices_block}\n\n"
+                "法律の知識に基づき、正しい選択肢を一つだけ選びなさい。\n"
+                "最終行で、次の形式で答えてください。\n\n"
+                "Answer: a\n"
+            )
+        output = f"Answer: {correct}"
 
     use_context = bool(context.strip())
     record = {
@@ -235,6 +256,7 @@ def build_dataset(
             few_shot=few_shot,
             top_k=top_k if use_rag else 0,
             retriever_type=retriever_type,
+            use_rag=use_rag,
         )
 
 

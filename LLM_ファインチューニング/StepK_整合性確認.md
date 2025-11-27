@@ -1,0 +1,5 @@
+- 変更方針（StepK指示）: no-RAG直答 v3 用に (1) 学習inputから「回答（1文字のみ）」等の過剰指示を削り、シンプルなプロンプトへ、(2) output を常に `Answer: <letter>` 形式に統一、(3) LoRAハイパラを弱める（epoch1・低LR・低r）、(4) v3用JSONLをtrain/devで新規生成。
+- 現行コードとの差分（要修正箇所）: `scripts/build_finetune_dataset.py` の direct/no-rag は `build_mc_prompt_direct` の既存テンプレ（回答指示で1文字のみを要求、outputは単なるa/b/c/d）。StepKの意図と不整合 → 学習プロンプトを新テンプレ（Answer: a例のみ）に差し替え、outputを `Answer: {correct}` に変更する必要あり。`app/core/prompts.py` の `build_mc_prompt_direct` も同じテンプレを共有しており、変更すると評価プロンプトにも影響する点に留意（学習専用で変えるか、学習用のみ別処理にする方針を決める）。
+- 整合している点: 評価側は `normalize_and_parse_answer()` を導入済みで `Answer: a` 形式の出力もパース可能。LoRA弱体化は学習コマンドのハイパラ指定で対応可能（コード改修不要）。train/dev分割JSONLは既存の selection_train/dev を利用できる。
+- 影響範囲: `scripts/build_finetune_dataset.py`（direct/no-ragのinput/output生成）、必要に応じて `app/core/prompts.py`（直回答プロンプト共用）に波及。既存v2 JSONLは残置可。学習スクリプトや評価スクリプトは大きな改造不要。
+- 次アクション案: 学習用プロンプト生成をStepK仕様に変更し、v3 JSONL（ft_direct_v3_train/dev_norag.jsonl）を新規生成→A100でv3学習/評価を実行。評価プロンプトへの影響を最小にするため、学習専用フォーマットを `build_finetune_dataset.py` 内で上書きするか、評価側テンプレとの切り分け方針を決める。
