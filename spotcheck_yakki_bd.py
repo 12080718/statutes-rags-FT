@@ -36,8 +36,8 @@ def main() -> None:
 
     samples = []
     for obj in iter_jsonl(args.path):
-        file_name = obj.get("file_name", "")
-        label = obj.get("correct_answer")
+        file_name = obj.get("file_name") or obj.get("meta", {}).get("source_file", "")
+        label = obj.get("correct_answer") or obj.get("meta", {}).get("correct")
         if not file_name.startswith("薬機法"):
             continue
         if label not in {"b", "d"}:

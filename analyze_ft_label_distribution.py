@@ -34,8 +34,8 @@ def main() -> None:
     label_shakuchi = Counter()
 
     for obj in iter_jsonl(args.path):
-        file_name = obj.get("file_name", "")
-        label = obj.get("correct_answer")
+        file_name = obj.get("file_name") or obj.get("meta", {}).get("source_file", "")
+        label = obj.get("correct_answer") or obj.get("meta", {}).get("correct")
         if label is None:
             continue
 
