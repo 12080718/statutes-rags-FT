@@ -126,9 +126,11 @@ def _extract_choice_from_text(text: str) -> Optional[str]:
 
 def normalize_and_parse_answer(raw_output: str) -> Optional[str]:
     """
-    LLM 出力から a/b/c/d を抽出する（見つからなければ None）。
-    - Answer/回答 行を末尾から優先
-    - 次に末尾数行、最後に全文でフォールバック
+    LLM 出力から a/b/c/d を抽出する（v3仕様、見つからなければ None）。
+    優先順位:
+      1) Answer/回答 を含む行（末尾から）
+      2) 「正解は/正解が」行（末尾から）
+      3) 末尾5行の「1文字だけの行」
     """
     if not raw_output:
         return None
@@ -136,20 +138,33 @@ def normalize_and_parse_answer(raw_output: str) -> Optional[str]:
     text = unicodedata.normalize("NFKC", raw_output).lower()
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
 
+    # Step 1: Answer/回答 を含む行を末尾から優先
     for line in reversed(lines):
         if "answer" in line or "回答" in line:
             choice = _extract_choice_from_text(line)
             if choice in VALID_CHOICES:
                 return choice
 
-    tail = "\n".join(lines[-3:]) if len(lines) >= 3 else "\n".join(lines)
-    choice = _extract_choice_from_text(tail)
-    if choice in VALID_CHOICES:
-        return choice
+    # Step 2: 「正解は」「正解が」を含む行を末尾から優先
+    for line in reversed(lines):
+        if "正解は" in line or "正解が" in line:
+            choice = _extract_choice_from_text(line)
+            if choice in VALID_CHOICES:
+                return choice
 
-    choice = _extract_choice_from_text(text)
-    if choice in VALID_CHOICES:
-        return choice
+    # Step 3: 末尾5行の「1文字だけの行」にフォールバック
+    tail_lines = lines[-5:] if len(lines) > 5 else lines
+    for line in reversed(tail_lines):
+        stripped = re.sub(r"[^abcd1-4]", "", line)
+        if not stripped:
+            continue
+        if len(set(stripped)) != 1:
+            continue
+        ch = stripped[0]
+        if ch in CHOICE_MAP:
+            return CHOICE_MAP[ch]
+        if ch in VALID_CHOICES:
+            return ch
 
     return None
 

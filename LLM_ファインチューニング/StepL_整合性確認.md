@@ -1,5 +1,5 @@
 - 指示内容（StepL）: `normalize_and_parse_answer` を Answer/回答 行優先・NFKC正規化・数字1〜4→a〜dマッピング・行末からの探索などで強化し、本文中のa等を誤拾いしないようにする。評価ループはこの関数1本で判定。
-- 実装状況: `scripts/evaluate_multiple_choice.py` を更新し、指定どおりのパーサ（行優先、尾部フォールバック、数字→選択肢対応、unknown時はNone→callerでunknown）を実装済み。`extract_answer` で None を "unknown" に変換。
+- 実装状況: `scripts/evaluate_multiple_choice.py` を更新し、v3仕様に合わせて Answer/回答行→正解は〜行→末尾5行の1文字行の順で優先的に抽出し、それでも無ければ None を返すようにした。`extract_answer` で None を "unknown" に変換。
 - 影響範囲: 評価時の回答抽出のみ。学習データ生成やモデルには非影響。既存の `normalize_and_parse_answer` 利用箇所は `extract_answer` 経由で一元化。
 - 整合性: StepLの仕様と下流コードは一致。過去の簡易パーサから置き換え済み。再評価で unknown/誤判定が減る想定。
 - TODO: 必要に応じて dev/test を新パーサで再実行し、精度/unknown数の変化を確認する。***
