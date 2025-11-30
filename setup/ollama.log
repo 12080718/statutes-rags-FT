@@ -2600,3 +2600,4 @@ time=2025-11-27T02:11:17.011+09:00 level=WARN source=types.go:800 msg="invalid o
 [GIN] 2025/11/27 - 02:11:18 | 200 |  1.476537663s |       127.0.0.1 | POST     "/api/generate"
 ggml_backend_cuda_device_get_memory device GPU-041aa946-e6e1-5551-8762-a077a074963f utilizing NVML memory reporting free: 4343070720 total: 10737418240
 time=2025-11-27T02:16:18.725+09:00 level=INFO source=server.go:392 msg="starting runner" cmd="/home/london08/yokote/statutes-rags-master/setup/bin/ollama runner --ollama-engine --port 41457"
+[GIN] 2025/11/29 - 08:16:33 | 200 |    6.939046ms |       127.0.0.1 | GET      "/api/tags"
